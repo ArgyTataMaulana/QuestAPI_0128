@@ -46,7 +46,11 @@ class EntryViewModel(private val repositoryDataSiswa: RepositoryDataSiswa) : Vie
             if (response.isSuccessful) {
                 true
             } else {
-                errorMessage = "Data gagal disimpan (HTTP ${response.code()})."
+                val serverMessage = response.errorBody()?.string()?.takeIf { it.isNotBlank() }
+                errorMessage = buildString {
+                    append("Data gagal disimpan (HTTP ${response.code()}).")
+                    if (serverMessage != null) append(" Respons server: $serverMessage")
+                }
                 false
             }
         } catch (exception: IOException) {
