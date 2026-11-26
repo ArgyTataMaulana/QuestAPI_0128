@@ -24,23 +24,24 @@ class MainActivity : ComponentActivity() {
                     DataSiswaApp(
                         modifier = Modifier.padding(paddingValues = innerPadding)
                     )
+                }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    QuestAPI_0128Theme {
-        Greeting("Android")
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        QuestAPI_0128Theme {
+            Greeting("Android")
+        }
     }
 }
