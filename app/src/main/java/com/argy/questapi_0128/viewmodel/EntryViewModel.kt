@@ -4,12 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import java.io.IOException
 import com.argy.questapi_0128.modeldata.DataSiswa
 import com.argy.questapi_0128.repositori.RepositoryDataSiswa
 import retrofit2.Response
 
 class EntryViewModel(private val repositoryDataSiswa: RepositoryDataSiswa) : ViewModel() {
     var uiStateSiswa by mutableStateOf(UIStateSiswa())
+        private set
+
+    var errorMessage by mutableStateOf<String?>(null)
         private set
 
     /* Fungsi untuk memvalidasi input */
@@ -28,16 +32,29 @@ class EntryViewModel(private val repositoryDataSiswa: RepositoryDataSiswa) : Vie
     }
 
     /* Fungsi untuk menyimpan data yang di-entry */
-    suspend fun addSiswa() {
-        if (validasiInput()) {
-            val sip: Response<Void> = repositoryDataSiswa.postDataSiswa(
+    suspend fun addSiswa(): Boolean {
+        if (!validasiInput()) {
+            errorMessage = "Semua kolom wajib diisi."
+            return false
+        }
+
+        errorMessage = null
+        return try {
+            val response: Response<Void> = repositoryDataSiswa.postDataSiswa(
                 uiStateSiswa.detailsSiswa.toDataSiswa()
             )
-            if (sip.isSuccessful) {
-                println("Sukses Tambah Data : ${sip.message()}")
+            if (response.isSuccessful) {
+                true
             } else {
-                println("Gagal tambah data : ${sip.errorBody()}")
+                errorMessage = "Data gagal disimpan (HTTP ${response.code()})."
+                false
             }
+        } catch (exception: IOException) {
+            errorMessage = "Tidak dapat terhubung ke server. Periksa koneksi dan alamat server."
+            false
+        } catch (exception: retrofit2.HttpException) {
+            errorMessage = "Server mengembalikan kesalahan (${exception.code()})."
+            false
         }
     }
 }

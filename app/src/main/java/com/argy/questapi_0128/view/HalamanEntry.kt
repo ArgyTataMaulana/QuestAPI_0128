@@ -54,11 +54,13 @@ fun EntrySiswaScreen(
     ) { innerPadding ->
         EntrySiswaBody(
             uiStateSiswa = viewModel.uiStateSiswa,
+            errorMessage = viewModel.errorMessage,
             onSiswaValueChange = viewModel::updateUiState,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.addSiswa()
-                    navigateBack()
+                    if (viewModel.addSiswa()) {
+                        navigateBack()
+                    }
                 }
             },
             modifier = Modifier
@@ -72,6 +74,7 @@ fun EntrySiswaScreen(
 @Composable
 fun EntrySiswaBody(
     uiStateSiswa: UIStateSiswa,
+    errorMessage: String? = null,
     onSiswaValueChange: (DetailsSiswa) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -85,6 +88,12 @@ fun EntrySiswaBody(
             onValueChange = onSiswaValueChange,
             modifier = Modifier.fillMaxWidth()
         )
+        errorMessage?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
         Button(
             onClick = onSaveClick,
             enabled = uiStateSiswa.isEntryValid,

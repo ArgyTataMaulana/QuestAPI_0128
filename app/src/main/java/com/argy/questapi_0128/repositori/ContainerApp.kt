@@ -16,7 +16,9 @@ interface ContainerApp {
 }
 
 class DefaultContainerApp : ContainerApp{
-    private val baseurl = "http://10.0.2"
+    // Android Emulator alias to the development machine's localhost.
+    // Keep the trailing slash required by Retrofit.
+    private val baseurl = "http://10.0.2.2/umyTI/"
 
 //    val logging = HttpLoggingInterceptor().apply {
 //        level = HttpLoggingInterceptor.Level.BODY
