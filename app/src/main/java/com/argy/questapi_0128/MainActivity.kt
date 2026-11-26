@@ -20,11 +20,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             QuestAPI_0128Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    DataSiswaApp(
+                        modifier = Modifier.padding(paddingValues = innerPadding)
                     )
-                }
             }
         }
     }
